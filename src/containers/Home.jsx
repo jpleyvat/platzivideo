@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import Header from '../components/Header';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
@@ -8,10 +8,26 @@ import CarouselItem from '../components/CarouselItem';
 
 import '../assets/styles/App.scss';
 
-const Home = ({ myList, trends, originals }) => {
+const Home = ({ myList, trends, originals, search }) => {
   return (
-    <div className='App'>
-      <Search />
+    <>
+      <Header />
+      <Search isHome />
+      {(() => {
+        if (search.query.length != 0) {
+          return search.found.length > 0 ? (
+            <Categories title='Found'>
+              <Carousel>
+                {search.found.map((item) => (
+                  <CarouselItem key={item.id} {...item} isList />
+                ))}
+              </Carousel>
+            </Categories>
+          ) : (
+            <h2 className='message'>No se ha encontrado nada con "{search.query}" :(</h2>
+          );
+        }
+      })()}
       {myList.length > 0 && (
         <Categories title='My lists'>
           <Carousel>
@@ -35,7 +51,7 @@ const Home = ({ myList, trends, originals }) => {
           ))}
         </Carousel>
       </Categories>
-    </div>
+    </>
   );
 };
 
@@ -44,6 +60,7 @@ const mapStateToProps = (state) => {
     myList: state.myList,
     trends: state.trends,
     originals: state.originals,
+    search: state.search,
   };
 };
 
