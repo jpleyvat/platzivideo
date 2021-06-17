@@ -32,7 +32,7 @@ const Header = (props) => {
           ) : (
             <img src={userIcon} alt='' />
           )}
-          <p>Perfil</p>
+          <p>Profile</p>
         </div>
         <ul>
           {hasUser ? (
